@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SGROAS – Sistema de Gestión de Recursos Operativos, Administrativos y de Seguridad para cooperativas de transporte del Ecuador." />
+  <meta name="theme-color" content="#1a3a5c" />
+  <title>SGROAS – Gestión de Cooperativas de Transporte</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-logo" aria-hidden="true">🚌</span>
+        <div>
+          <span class="brand-name">SGROAS</span>
+          <span class="brand-tagline">Cooperativas de Transporte · Ecuador</span>
+        </div>
+      </div>
+
+      <button
+        class="nav-toggle"
+        aria-label="Abrir menú de navegación"
+        aria-expanded="false"
+        aria-controls="main-nav"
+        id="nav-toggle"
+      >
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <nav id="main-nav" role="navigation" aria-label="Navegación principal">
+        <ul class="nav-list" role="list">
+          <li><a href="#inicio" class="nav-link active" aria-current="page">Inicio</a></li>
+          <li><a href="#cooperativas" class="nav-link">Cooperativas</a></li>
+          <li><a href="#flota" class="nav-link">Flota</a></li>
+          <li><a href="#registro" class="nav-link">Registro</a></li>
+          <li><a href="#estadisticas" class="nav-link">Estadísticas</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+<main id="main-content">
+<section id="inicio" class="hero" aria-labelledby="hero-title">
+      <div class="container hero-content">
+        <h1 id="hero-title">Sistema de Gestión de Recursos Operativos, Administrativos y de Seguridad</h1>
+        <p class="hero-sub">Plataforma integral para cooperativas de transporte terrestre del Ecuador. Gestiona flotas, conductores, rutas y cumplimiento normativo desde un solo lugar.</p>
+        <div class="hero-actions">
+          <a href="#registro" class="btn btn-primary">Registrar cooperativa</a>
+          <a href="#cooperativas" class="btn btn-outline">Ver directorio</a>
+        </div>
+        <div class="hero-stats" role="list" aria-label="Estadísticas del sistema">
+          <div class="stat-item" role="listitem">
+            <span class="stat-num" id="stat-coops">--</span>
+            <span class="stat-label">Cooperativas</span>
+          </div>
+          <div class="stat-item" role="listitem">
+            <span class="stat-num" id="stat-units">--</span>
+            <span class="stat-label">Unidades activas</span>
+          </div>
+          <div class="stat-item" role="listitem">
+            <span class="stat-num" id="stat-routes">--</span>
+            <span class="stat-label">Rutas registradas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+<div id="loader" class="loader" role="status" aria-live="polite" aria-label="Cargando datos" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Cargando datos de cooperativas…</p>
+    </div>
+<div id="empty-state" class="empty-state" role="status" aria-live="polite" hidden>
+      <p>⚠️ No se encontraron cooperativas. Intenta ajustar la búsqueda.</p>
+    </div>
+<div id="alert-region" role="alert" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+<section id="cooperativas" class="section" aria-labelledby="coop-title">
+      <div class="container">
+        <h2 id="coop-title">Directorio de Cooperativas</h2>
+        <p class="section-sub">Información actualizada de operadoras de transporte interprovincial e intraprovincial registradas.</p>
+
+        <div class="search-bar" role="search">
+          <label for="search-input" class="sr-only">Buscar cooperativa</label>
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Buscar por nombre o ciudad…"
+            aria-label="Buscar cooperativa por nombre o ciudad"
+            aria-controls="coop-grid"
+            autocomplete="off"
+          />
+          <button class="btn btn-primary" id="search-btn" aria-label="Ejecutar búsqueda">Buscar</button>
+        </div>
+
+        <div id="coop-grid" class="coop-grid" role="list" aria-label="Lista de cooperativas">
+</div>
+      </div>
+    </section>
+<section id="flota" class="section section-alt" aria-labelledby="flota-title">
+      <div class="container">
+        <h2 id="flota-title">Control de Flota</h2>
+        <p class="section-sub">Estado en tiempo real de las unidades de transporte registradas en el sistema.</p>
+        <div class="flota-grid" id="flota-grid" role="list" aria-label="Unidades de flota">
+</div>
+      </div>
+    </section>
+<section id="registro" class="section" aria-labelledby="form-title">
+      <div class="container form-container">
+        <h2 id="form-title">Registro de Cooperativa</h2>
+        <p class="section-sub">Complete el formulario para registrar una nueva cooperativa en el sistema SGROAS.</p>
+
+        <form id="registro-form" novalidate aria-label="Formulario de registro de cooperativa">
+
+          <fieldset>
+            <legend>Datos institucionales</legend>
+
+            <div class="form-group">
+              <label for="nombre">Nombre de la cooperativa <span aria-hidden="true" class="required">*</span></label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                required
+                minlength="3"
+                maxlength="100"
+                placeholder="Ej. Cooperativa de Transportes Flota Imbabura"
+                aria-required="true"
+                aria-describedby="nombre-error"
+                autocomplete="organization"
+              />
+              <span id="nombre-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="ruc">RUC de la cooperativa <span aria-hidden="true" class="required">*</span></label>
+              <input
+                type="text"
+                id="ruc"
+                name="ruc"
+                required
+                pattern="[0-9]{13}"
+                maxlength="13"
+                placeholder="0000000000001"
+                aria-required="true"
+                aria-describedby="ruc-error ruc-hint"
+              />
+              <span id="ruc-hint" class="field-hint">Ingrese los 13 dígitos del RUC sin guiones.</span>
+              <span id="ruc-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Correo electrónico <span aria-hidden="true" class="required">*</span></label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="contacto@cooperativa.ec"
+                aria-required="true"
+                aria-describedby="email-error"
+                autocomplete="email"
+              />
+              <span id="email-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="telefono">Teléfono de contacto <span aria-hidden="true" class="required">*</span></label>
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                required
+                pattern="[0-9+\-\s]{7,15}"
+                placeholder="+593 99 123 4567"
+                aria-required="true"
+                aria-describedby="telefono-error"
+                autocomplete="tel"
+              />
+              <span id="telefono-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+          </fieldset>
+
+          <fieldset>
+            <legend>Información operativa</legend>
+
+            <div class="form-group">
+              <label for="tipo-servicio">Tipo de servicio</label>
+              <select id="tipo-servicio" name="tipo-servicio" aria-describedby="tipo-error">
+                <option value="">-- Seleccione --</option>
+                <option value="interprovincial">Interprovincial</option>
+                <option value="intraprovincial">Intraprovincial</option>
+                <option value="urbano">Urbano</option>
+                <option value="escolar">Escolar</option>
+                <option value="carga">Transporte de carga</option>
+              </select>
+              <span id="tipo-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="num-unidades">Número de unidades <span aria-hidden="true" class="required">*</span></label>
+              <input
+                type="number"
+                id="num-unidades"
+                name="num-unidades"
+                required
+                min="1"
+                max="500"
+                placeholder="15"
+                aria-required="true"
+                aria-describedby="unidades-error"
+              />
+              <span id="unidades-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="fecha-constitucion">Fecha de constitución</label>
+              <input
+                type="date"
+                id="fecha-constitucion"
+                name="fecha-constitucion"
+                aria-describedby="fecha-hint"
+              />
+              <span id="fecha-hint" class="field-hint">Fecha de constitución legal de la cooperativa.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="cobertura">Cobertura geográfica (%)</label>
+              <input
+                type="range"
+                id="cobertura"
+                name="cobertura"
+                min="0"
+                max="100"
+                value="50"
+                step="5"
+                aria-describedby="cobertura-val"
+              />
+              <span id="cobertura-val" class="range-output">50%</span>
+            </div>
+
+          </fieldset>
+
+          <fieldset>
+            <legend>Representante legal</legend>
+
+            <div class="form-group">
+              <label for="rep-nombre">Nombre del representante <span aria-hidden="true" class="required">*</span></label>
+              <input
+                type="text"
+                id="rep-nombre"
+                name="rep-nombre"
+                required
+                placeholder="Nombres y apellidos completos"
+                aria-required="true"
+                aria-describedby="rep-error"
+                autocomplete="name"
+              />
+              <span id="rep-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Contraseña de acceso <span aria-hidden="true" class="required">*</span></label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                minlength="8"
+                pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
+                aria-required="true"
+                aria-describedby="password-error password-hint"
+                autocomplete="new-password"
+              />
+              <span id="password-hint" class="field-hint">Mínimo 8 caracteres, al menos una mayúscula y un número.</span>
+              <span id="password-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="logo">Logo de la cooperativa (PNG/JPG)</label>
+              <input
+                type="file"
+                id="logo"
+                name="logo"
+                accept="image/png,image/jpeg"
+                aria-describedby="logo-hint"
+              />
+              <span id="logo-hint" class="field-hint">Tamaño máximo 2 MB. Formatos: PNG, JPG.</span>
+            </div>
+
+            <div class="form-group form-check">
+              <input
+                type="checkbox"
+                id="acepta-terminos"
+                name="acepta-terminos"
+                required
+                aria-required="true"
+                aria-describedby="terms-error"
+              />
+              <label for="acepta-terminos">
+                Acepto los <a href="#" class="link">términos y condiciones</a> del sistema SGROAS
+                <span aria-hidden="true" class="required">*</span>
+              </label>
+              <span id="terms-error" class="field-error" role="alert" aria-live="polite"></span>
+            </div>
+
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="reset" class="btn btn-outline">Limpiar formulario</button>
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              Registrar cooperativa
+            </button>
+          </div>
+
+        </form>
+<div id="form-success" class="form-success" role="status" aria-live="polite" hidden>
+          <p>✅ Cooperativa registrada exitosamente. Los datos han sido guardados en el sistema.</p>
+        </div>
+      </div>
+    </section>
+<section id="estadisticas" class="section section-alt" aria-labelledby="stats-title">
+      <div class="container">
+        <h2 id="stats-title">Estadísticas del Sistema</h2>
+        <p class="section-sub">Resumen operativo actualizado de la red de transporte registrada en SGROAS.</p>
+        <div class="stats-dashboard" id="stats-dashboard" role="list" aria-label="Panel de estadísticas">
+</div>
+      </div>
+    </section>
+
+  </main>
+<div
+    id="modal-overlay"
+    class="modal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    aria-describedby="modal-desc"
+    hidden
+  >
+    <div class="modal" id="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Cerrar ventana">✕</button>
+      <h3 id="modal-title">Detalle de Cooperativa</h3>
+      <div id="modal-desc" class="modal-body"><!-- dynamic --></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modal-close-btn">Cerrar</button>
+      </div>
+    </div>
+  </div>
+<footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p>© 2025 SGROAS – Sistema de Gestión de Cooperativas de Transporte del Ecuador.</p>
+      <p>Desarrollado como Proyecto de Fin de Curso · HTML5 · CSS3 · JavaScript ES6+</p>
+      <nav aria-label="Navegación del pie de página">
+        <ul class="footer-links" role="list">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#registro">Registro</a></li>
+          <li><a href="#estadisticas">Estadísticas</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
